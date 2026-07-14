@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.title }} - Web Portofolio{% endblock %}
+
+{% block content %}
+<section class="section-darker">
+    <div class="container">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb" style="background: none; padding: 0;">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('portfolio') }}" style="color: var(--text-muted); text-decoration: none;">Portfolio</a>
+                </li>
+                <li class="breadcrumb-item active" style="color: var(--text-primary);" aria-current="page">{{ project.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-5 align-items-start">
+            <!-- Kolom Kiri: Gambar -->
+            <div class="col-lg-7">
+                <div style="border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color);">
+                    <img src="{{ url_for('static', filename='uploads/' + project.image) if project.image else 'https://placehold.co/800x450/16161f/7c3aed?text=' + project.title[:20] }}"
+                         class="img-fluid w-100"
+                         alt="{{ project.title }}"
+                         style="display: block; object-fit: cover; max-height: 420px;">
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: Info Project -->
+            <div class="col-lg-5">
+                <p style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">
+                    <i class="fa-regular fa-calendar me-1"></i>
+                    {{ project.created_at.strftime('%d %b %Y') }}
+                </p>
+                <h1 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 1.5rem;">{{ project.title }}</h1>
+
+                {% if project.tech_stack %}
+                <div class="mb-4">
+                    <p style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem;">Teknologi</p>
+                    <div>
+                        {% for tech in project.tech_stack.split(',') %}
+                            <span class="tech-badge">{{ tech.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="mb-4">
+                    <p style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem;">Deskripsi Project</p>
+                    <p style="color: var(--text-muted); line-height: 1.8; white-space: pre-wrap; font-size: 0.95rem;">{{ project.description }}</p>
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="d-flex flex-column gap-3">
+                    {% if project.demo_link %}
+                    <a href="{{ project.demo_link }}" target="_blank" class="btn-primary-custom" style="justify-content: center; border-radius: 12px; padding: 0.8rem; text-align: center;">
+                        <i class="fa-solid fa-globe"></i> Live Demo
+                    </a>
+                    {% endif %}
+
+                    {% if project.github_link %}
+                    <a href="{{ project.github_link }}" target="_blank" class="btn-outline-custom" style="justify-content: center; border-radius: 12px; padding: 0.8rem; text-align: center;">
+                        <i class="fa-brands fa-github"></i> Source Code (GitHub)
+                    </a>
+                    {% endif %}
+
+                    <a href="{{ url_for('portfolio') }}" class="btn-outline-custom" style="justify-content: center; border-radius: 12px; padding: 0.8rem; text-align: center; border-color: transparent;">
+                        <i class="fa-solid fa-arrow-left"></i> Kembali ke Portfolio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Web Portofolio{% endblock %}
+
+{% block content %}
+
+<!-- ===== HERO SECTION (CENTER ALIGNED) ===== -->
+<section class="hero-section" style="min-height: calc(100vh - var(--navbar-height)); display: flex; align-items: center; justify-content: center; text-align: center;">
+    <!-- Blob Background -->
+    <div style="position: absolute; top: -10%; left: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+    <div style="position: absolute; bottom: -10%; right: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+
+    <div class="container reveal" style="max-width: 900px; z-index: 1;">
+        
+        <!-- Foto Profil Avatar -->
+        <div style="width: 170px; height: 170px; border-radius: 50%; overflow: hidden; margin: 0 auto 1.5rem; border: 3px solid rgba(124, 58, 237, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; background: var(--bg-card);">
+            {% if user and user.photo %}
+                <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" alt="Profil">
+            {% else %}
+                <i class="fa-solid fa-user-astronaut" style="font-size: 3.5rem; color: var(--accent-1);"></i>
+            {% endif %}
+        </div>
+
+        <div class="hero-badge mx-auto mb-4" style="display: inline-flex;">
+            <i class="fa-solid fa-bolt text-warning me-2"></i> Selamat Datang di Portofolio Saya
+        </div>
+
+        <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem; letter-spacing: -1px;">
+            {% if user %}
+                Halo, Saya <span class="gradient-text">{{ user.name }}</span>
+            {% else %}
+                Halo, Saya <span class="gradient-text">Web Developer</span>
+            {% endif %}
+        </h1>
+
+        <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem;">
+            {% if user %}
+                {{ user.bio or 'Seorang kreator digital yang bersemangat membangun hal-hal luar biasa di internet.' }}
+            {% else %}
+                Seorang kreator digital yang bersemangat membangun hal-hal luar biasa di internet.
+            {% endif %}
+        </p>
+
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('portfolio') }}" class="btn-primary-custom px-4 py-3" style="font-size: 1rem; border-radius: 50px;">
+                <i class="fa-solid fa-compass me-2"></i> Jelajahi Karya
+            </a>
+            <a href="{{ url_for('contact') }}" class="btn-outline-custom px-4 py-3" style="font-size: 1rem; border-radius: 50px;">
+                <i class="fa-solid fa-envelope me-2"></i> Hubungi Saya
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ===== BENTO BOX HIGHLIGHTS ===== -->
+<section class="section-darker pt-2 pb-5">
+    <div class="container reveal">
+        <div class="bento-grid">
+            
+            <!-- Box 1: Intro (Large) -->
+            <div class="bento-item bento-large" style="background: linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(22,22,31,1) 100%);">
+                <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-1); font-weight: 700; margin-bottom: 1rem;">Tentang Saya</p>
+                <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">
+                    {% if user %}{{ user.name }}{% else %}Developer Kreatif{% endif %}
+                </h3>
+                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6;">
+                    Saya berfokus pada perpaduan desain modern dan arsitektur kode yang tangguh untuk menciptakan produk web yang tidak hanya terlihat indah tapi juga berperforma tinggi.
+                </p>
+                <div class="mt-auto pt-4">
+                    <a href="{{ url_for('about') }}" style="color: var(--text-primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-1)'" onmouseout="this.style.color='var(--text-primary)'">
+                        Kenali Lebih Jauh <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Box 2: Stats (Tall) -->
+            <div class="bento-item bento-tall d-flex flex-column justify-content-center align-items-center text-center">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(59,130,246,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <i class="fa-solid fa-rocket" style="font-size: 2rem; color: var(--accent-2);"></i>
+                </div>
+                <h2 style="font-size: 3.5rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ projects|length if projects else 0 }}+</h2>
+                <p style="color: var(--text-muted); font-weight: 500; font-size: 1.1rem; margin-top: 0.5rem;">Project<br>Selesai</p>
+            </div>
+
+            <!-- Box 3: Skill (Normal) -->
+            <div class="bento-item" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 0.5rem;">Tech Stack</p>
+                    <h4 style="font-size: 1.2rem; font-weight: 700;">Alat Utama</h4>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    {% if user and user.skills %}
+                        {% for skill in user.skills.split(',')[:4] %}
+                            <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.85rem; font-weight: 500;">{{ skill.strip() }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.85rem;">Python</span>
+                        <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.85rem;">Flask</span>
+                        <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.85rem;">CSS</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Box 4: Contact (Normal) -->
+            <div class="bento-item" style="background: var(--gradient); border: none;">
+                <div class="mt-auto">
+                    <h4 style="color: #fff; font-weight: 700; font-size: 1.3rem; margin-bottom: 0.5rem;">Punya Ide?</h4>
+                    <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-bottom: 1.5rem;">Mari kita bicarakan project Anda selanjutnya.</p>
+                    <a href="{{ url_for('contact') }}" style="display: inline-block; background: #fff; color: var(--accent-1); padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; text-decoration: none; font-size: 0.9rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        Kirim Pesan
+                    </a>
+                </div>
+            </div>
+
+            <!-- Box 5: Latest Project (Wide) -->
+            <div class="bento-item bento-wide" style="padding: 0; display: flex; flex-direction: row; align-items: stretch;">
+                {% if projects %}
+                    {% set latest = projects[0] %}
+                    <div style="flex: 1; padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
+                        <span class="badge bg-primary mb-3" style="width: fit-content;">Project Terbaru</span>
+                        <h4 style="font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">{{ latest.title }}</h4>
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">{{ latest.description[:80] }}...</p>
+                        <a href="{{ url_for('project_detail', id=latest.id) }}" style="color: var(--accent-2); font-weight: 600; text-decoration: none; margin-top: auto;">Lihat Project &rarr;</a>
+                    </div>
+                    <div style="flex: 1; position: relative;">
+                        <img src="{{ url_for('static', filename='uploads/' + latest.image) if latest.image else 'https://placehold.co/600x400/16161f/7c3aed?text=' + latest.title[:15] }}" style="width: 100%; height: 100%; object-fit: cover;" alt="Latest Project">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg-card) 0%, transparent 50%);"></div>
+                    </div>
+                {% else %}
+                    <div style="padding: 2rem; width: 100%; display: flex; align-items: center; justify-content: center;">
+                        <p style="color: var(--text-muted);">Belum ada project untuk ditampilkan.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

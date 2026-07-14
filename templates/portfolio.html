@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Portfolio Project - Web Portofolio{% endblock %}
+
+{% block content %}
+<section class="section-darker" style="padding-top: 3rem;">
+    <div class="container reveal">
+
+        <!-- Header -->
+        <div class="mb-5 pb-4 text-center">
+            <p style="text-transform: uppercase; letter-spacing: 2px; color: var(--accent-2); font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;">Karya Pilihan</p>
+            <h1 style="font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem;">
+                Arsip <span class="gradient-text">Project</span>
+            </h1>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.7;">
+                Kumpulan project terbaik yang pernah saya kerjakan, dari aplikasi web sederhana hingga sistem kompleks.
+            </p>
+        </div>
+
+        <!-- ASYMMETRICAL GRID LAYOUT -->
+        <div class="portfolio-asymmetric">
+            {% if projects %}
+                {% for project in projects %}
+                <div class="project-card-asym reveal" style="transition-delay: {{ loop.index0 * 100 }}ms;">
+                    
+                    <!-- Gambar -->
+                    <div class="project-image-wrapper">
+                        <img src="{{ url_for('static', filename='uploads/' + project.image) if project.image else 'https://placehold.co/800x600/16161f/7c3aed?text=' + project.title[:15] }}" alt="{{ project.title }}">
+                        
+                        <!-- Akses Cepat di Atas Gambar -->
+                        <div style="position: absolute; top: 1.5rem; right: 1.5rem; display: flex; gap: 0.5rem; z-index: 2;">
+                            {% if project.github_link %}
+                            <a href="{{ project.github_link }}" target="_blank" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none;" title="GitHub">
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                            {% endif %}
+                            {% if project.demo_link %}
+                            <a href="{{ project.demo_link }}" target="_blank" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none;" title="Live Demo">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Detail Teks -->
+                    <div class="project-info-wrapper">
+                        <p style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem;"><i class="fa-regular fa-calendar me-1"></i> {{ project.created_at.strftime('%Y') }}</p>
+                        <h3 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2;">{{ project.title }}</h3>
+                        
+                        <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; margin-bottom: 2rem;">
+                            {{ project.description[:180] }}{% if project.description|length > 180 %}...{% endif %}
+                        </p>
+
+                        <!-- Tech Stack Tags -->
+                        {% if project.tech_stack %}
+                        <div class="mb-4" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            {% for tech in project.tech_stack.split(',') %}
+                                <span style="padding: 0.4rem 1rem; background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2); color: var(--text-primary); border-radius: 50px; font-size: 0.8rem; font-weight: 500;">
+                                    {{ tech.strip() }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="mt-auto pt-3">
+                            <a href="{{ url_for('project_detail', id=project.id) }}" class="btn-primary-custom" style="display: inline-flex; border-radius: 50px; padding: 0.8rem 1.8rem; font-weight: 600;">
+                                Baca Studi Kasus <i class="fa-solid fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            {% else %}
+                <div class="empty-state text-center py-5">
+                    <i class="fa-regular fa-folder-open mb-3" style="font-size: 3rem; color: var(--text-muted);"></i>
+                    <p style="font-size: 1.2rem; font-weight: 500;">Belum ada project yang ditambahkan.</p>
+                    <p style="color: var(--text-muted);">Project yang Anda buat akan muncul di sini.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
