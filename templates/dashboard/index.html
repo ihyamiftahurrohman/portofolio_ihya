@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Admin - Web Portofolio{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="fw-bold"><i class="fa-solid fa-gauge me-2"></i>Dashboard Utama</h2>
+            <p class="text-muted">Selamat datang kembali, <strong>{{ current_user.name }}</strong>! Berikut adalah ringkasan aktivitas portofolio Anda.</p>
+        </div>
+    </div>
+
+    <!-- Menampilkan pesan error atau sukses -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- STATISTIK KARTU (STAT CARDS) -->
+    <div class="row g-4 mb-5">
+        <!-- Kartu Total Project -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-primary text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fa-solid fa-briefcase fa-3x opacity-50"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Total Project</h5>
+                        <h2 class="fw-bold mb-0">{{ total_projects }}</h2>
+                    </div>
+                </div>
+                <a href="{{ url_for('dashboard_projects') }}" class="card-footer text-white text-decoration-none d-flex justify-content-between align-items-center bg-primary border-top" style="filter: brightness(0.9);">
+                    <span>Kelola Project</span>
+                    <i class="fa-solid fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Kartu Total Pesan -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-success text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fa-solid fa-envelope fa-3x opacity-50"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Total Pesan</h5>
+                        <h2 class="fw-bold mb-0">{{ total_messages }}</h2>
+                    </div>
+                </div>
+                <a href="{{ url_for('dashboard_messages') }}" class="card-footer text-white text-decoration-none d-flex justify-content-between align-items-center bg-success border-top" style="filter: brightness(0.9);">
+                    <span>Lihat Semua Pesan</span>
+                    <i class="fa-solid fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Kartu Pesan Belum Dibaca -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-danger text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fa-solid fa-bell fa-3x opacity-50"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Pesan Baru (Belum Dibaca)</h5>
+                        <h2 class="fw-bold mb-0">{{ unread_messages }}</h2>
+                    </div>
+                </div>
+                <a href="{{ url_for('dashboard_messages') }}" class="card-footer text-white text-decoration-none d-flex justify-content-between align-items-center bg-danger border-top" style="filter: brightness(0.9);">
+                    <span>Cek Kotak Masuk</span>
+                    <i class="fa-solid fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- PINTASAN CEPAT (QUICK ACTIONS) -->
+    <h4 class="fw-bold mb-3">Pintasan Cepat</h4>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <!-- Nanti route ini akan kita arahkan ke add_project di Tahap 7 -->
+            <a href="{{ url_for('dashboard_projects') }}" class="btn btn-outline-primary w-100 py-3 fw-bold">
+                <i class="fa-solid fa-plus me-2"></i>Tambah Project Baru
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('dashboard_profile') }}" class="btn btn-outline-secondary w-100 py-3 fw-bold">
+                <i class="fa-solid fa-user-pen me-2"></i>Edit Profil & Skill
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('index') }}" target="_blank" class="btn btn-outline-dark w-100 py-3 fw-bold">
+                <i class="fa-solid fa-globe me-2"></i>Lihat Halaman Publik
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

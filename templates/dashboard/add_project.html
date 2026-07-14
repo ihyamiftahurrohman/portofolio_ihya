@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Tambah Project - Dashboard Admin{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white p-4">
+                    <h3 class="fw-bold mb-0"><i class="fa-solid fa-plus-circle me-2"></i>Tambah Project Baru</h3>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    
+                    <!-- enctype="multipart/form-data" WAJIB ada jika form mengirimkan sebuah file -->
+                    <form action="{{ url_for('add_project') }}" method="POST" enctype="multipart/form-data">
+                        <div class="mb-4">
+                            <label for="title" class="form-label fw-bold">Judul Project *</label>
+                            <input type="text" class="form-control bg-light" id="title" name="title" required placeholder="Contoh: Aplikasi Sistem Informasi Rumah Sakit">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-bold">Deskripsi Lengkap *</label>
+                            <textarea class="form-control bg-light" id="description" name="description" rows="5" required placeholder="Jelaskan secara detail tentang project ini..."></textarea>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="image" class="form-label fw-bold">Gambar/Screenshot Project (Opsional)</label>
+                            <!-- accept="image/*" memaksa File Explorer hanya menampilkan file gambar -->
+                            <input class="form-control bg-light" type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg, image/gif">
+                            <div class="form-text">Format yang didukung: JPG, JPEG, PNG, GIF. Maksimal ukuran sesuai config.py (2MB).</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="tech_stack" class="form-label fw-bold">Teknologi yang Digunakan</label>
+                            <input type="text" class="form-control bg-light" id="tech_stack" name="tech_stack" placeholder="Contoh: Python, Flask, Bootstrap, MySQL (Pisahkan dengan koma)">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="demo_link" class="form-label fw-bold">Link Live Demo (Opsional)</label>
+                                <input type="url" class="form-control bg-light" id="demo_link" name="demo_link" placeholder="https://www.example.com">
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="github_link" class="form-label fw-bold">Link Repository GitHub (Opsional)</label>
+                                <input type="url" class="form-control bg-light" id="github_link" name="github_link" placeholder="https://github.com/username/repo">
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 border-top pt-4">
+                            <a href="{{ url_for('dashboard_projects') }}" class="btn btn-secondary">Batal</a>
+                            <button type="submit" class="btn btn-primary fw-bold"><i class="fa-solid fa-save me-2"></i>Simpan Project</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
