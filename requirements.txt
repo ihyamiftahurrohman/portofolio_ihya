@@ -1,0 +1,21 @@
+# ============================================
+# Requirements - Web Portofolio Dinamis
+# ============================================
+# File ini berisi daftar library Python yang
+# dibutuhkan oleh project ini.
+#
+# Cara install: pip install -r requirements.txt
+# ============================================
+
+# Framework utama untuk membuat web application
+Flask==3.1.1
+
+# ORM (Object Relational Mapper) untuk mengelola database
+# tanpa menulis query SQL secara manual
+Flask-SQLAlchemy==3.1.1
+
+# Library untuk login/logout dan session management
+Flask-Login==0.6.3
+
+# Library untuk hashing password agar aman
+Werkzeug==3.1.3
