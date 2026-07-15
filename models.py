@@ -39,6 +39,9 @@ class User(db.Model, UserMixin):
     # Skills disimpan sebagai satu string panjang (contoh: "HTML, CSS, Python")
     skills = db.Column(db.Text, nullable=True)
     
+    # Nama/Brand yang tampil di Header (Navbar)
+    site_name = db.Column(db.String(100), nullable=True, default='<Portofolio />')
+
     # Link Sosial Media
     github = db.Column(db.String(200), nullable=True)
     linkedin = db.Column(db.String(200), nullable=True)

@@ -1,0 +1,45 @@
+# ============================================
+# .gitignore - File yang Diabaikan oleh Git
+# ============================================
+# File/folder yang tercantum di sini TIDAK akan
+# di-track oleh Git (tidak akan ikut di-upload
+# ke repository GitHub).
+# ============================================
+
+# --- Python ---
+# Folder cache Python (file .pyc yang dikompilasi otomatis)
+__pycache__/
+*.py[cod]
+
+# --- Virtual Environment ---
+# Folder virtual environment (berisi library yang diinstall)
+# Tidak perlu di-upload karena bisa diinstall ulang via requirements.txt
+venv/
+env/
+.venv/
+
+# --- Database ---
+# File database SQLite (berisi data, bukan kode)
+*.db
+
+# --- File Upload ---
+# Gambar yang diupload user (tidak perlu di-track Git)
+static/uploads/*
+# Tapi tetap simpan foldernya (agar folder uploads tetap ada)
+!static/uploads/.gitkeep
+
+# --- IDE/Editor ---
+# File konfigurasi editor (VS Code, PyCharm, dll)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS ---
+# File sistem operasi yang tidak relevan
+.DS_Store
+Thumbs.db
+
+# --- Environment Variables ---
+# File yang menyimpan variabel rahasia
+.env

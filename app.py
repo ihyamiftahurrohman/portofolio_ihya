@@ -13,7 +13,7 @@ Cara menjalankan:
     python app.py
 """
 
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, jsonify
 from config import Config
 from models import db, User, Project, Message
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -54,6 +54,12 @@ login_manager.login_message_category = 'warning'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+# Context Processor: Menyediakan variabel `site_user` ke SEMUA template secara otomatis
+# Ini membuat navbar bisa membaca site_name tanpa perlu dikirim manual di setiap route
+@app.context_processor
+def inject_site_user():
+    return dict(site_user=User.query.first())
 
 # Membuat semua tabel di database jika belum ada
 # app_context() diperlukan agar SQLAlchemy tahu aplikasi Flask mana yang sedang aktif
@@ -131,6 +137,25 @@ def contact():
         
     # Jika method GET (hanya membuka halaman)
     return render_template('contact.html')
+
+
+# ============================================
+# ROUTE - UPDATE SITE NAME (HEADER/NAVBAR)
+# ============================================
+
+@app.route('/api/update-site-name', methods=['POST'])
+@login_required
+def update_site_name():
+    """Endpoint AJAX untuk mengubah nama header/navbar secara langsung dari web"""
+    new_name = request.form.get('site_name', '').strip()
+    if not new_name:
+        return jsonify({'status': 'error', 'message': 'Nama tidak boleh kosong'}), 400
+    
+    user = User.query.first()
+    user.site_name = new_name
+    db.session.commit()
+    
+    return jsonify({'status': 'success', 'site_name': new_name})
 
 
 # ============================================
@@ -343,6 +368,7 @@ def dashboard_profile():
         user.github = request.form.get('github')
         user.linkedin = request.form.get('linkedin')
         user.instagram = request.form.get('instagram')
+        user.site_name = request.form.get('site_name') or '<Portofolio />'
         
         # Cek jika ada upload foto profil baru
         if 'photo' in request.files:

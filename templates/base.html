@@ -19,9 +19,27 @@
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container h-100 d-flex align-items-center justify-content-between">
             <!-- Brand / Logo -->
-            <a class="navbar-brand-custom" href="{{ url_for('index') }}">
-                &lt;Portofolio /&gt;
+            <a class="navbar-brand-custom" href="{{ url_for('index') }}" id="navbar-brand-link">
+                <span id="navbar-brand-text">{{ site_user.site_name if site_user and site_user.site_name else '&lt;Portofolio /&gt;' }}</span>
             </a>
+
+            {% if current_user.is_authenticated %}
+            <!-- Tombol Edit Brand (hanya tampil untuk Admin) -->
+            <button id="btn-edit-brand" title="Edit nama header" onclick="openBrandEditor()" style="background:none; border:none; cursor:pointer; color: var(--accent-primary, #6366f1); margin-left: 4px; padding: 2px 6px; border-radius: 6px; transition: background 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.15)'" onmouseout="this.style.background='none'">
+                <i class="fa-solid fa-pen-to-square fa-sm"></i>
+            </button>
+
+            <!-- Popup Editor Brand -->
+            <div id="brand-editor" style="display:none; position:absolute; top: 60px; left: 16px; z-index: 9999; background: var(--bg-card, #1e1e2e); border: 1px solid var(--border-color, #333); border-radius: 12px; padding: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); min-width: 300px;">
+                <p style="margin:0 0 8px; font-size: 0.8rem; color: var(--text-secondary, #aaa);"><i class="fa-solid fa-pen-to-square me-1"></i> Edit Nama Header</p>
+                <div class="d-flex gap-2 align-items-center">
+                    <input type="text" id="brand-input" maxlength="60" placeholder="Nama header..." style="flex:1; background: var(--bg-secondary, #252535); border: 1px solid var(--border-color, #444); color: var(--text-primary, #fff); border-radius: 8px; padding: 8px 12px; font-size: 0.95rem; outline:none;">
+                    <button onclick="saveBrandName()" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color:#fff; border:none; border-radius: 8px; padding: 8px 14px; cursor:pointer; font-size:0.9rem; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><i class="fa-solid fa-check"></i></button>
+                    <button onclick="closeBrandEditor()" style="background: rgba(255,255,255,0.08); color:#aaa; border:none; border-radius: 8px; padding: 8px 12px; cursor:pointer; font-size:0.9rem;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="brand-save-msg" style="font-size:0.78rem; margin-top:8px; min-height:16px;"></div>
+            </div>
+            {% endif %}
 
             <!-- Toggler Mobile -->
             <button class="navbar-toggler border-0 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="background:none; color: var(--text-primary);">
@@ -80,7 +98,7 @@
     <footer class="footer-custom">
         <div class="container text-center">
             <p class="footer-text">
-                &copy; 2025 <span class="footer-brand">&lt;Portofolio /&gt;</span> &mdash; Dibuat dengan ❤️ menggunakan Python Flask
+                &copy; 2025 <span class="footer-brand">{{ site_user.site_name if site_user and site_user.site_name else '&lt;Portofolio /&gt;' }}</span> &mdash; Dibuat dengan ❤️ menggunakan Python Flask
             </p>
         </div>
     </footer>
@@ -89,5 +107,82 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    {% if current_user.is_authenticated %}
+    <!-- Script Edit Header Brand (hanya untuk Admin) -->
+    <script>
+        function openBrandEditor() {
+            var editor = document.getElementById('brand-editor');
+            var currentName = document.getElementById('navbar-brand-text').textContent.trim();
+            document.getElementById('brand-input').value = currentName;
+            document.getElementById('brand-save-msg').textContent = '';
+            document.getElementById('brand-save-msg').style.color = '';
+            editor.style.display = 'block';
+            document.getElementById('brand-input').focus();
+            // Tekan Enter untuk simpan
+            document.getElementById('brand-input').onkeydown = function(e) {
+                if (e.key === 'Enter') saveBrandName();
+                if (e.key === 'Escape') closeBrandEditor();
+            };
+        }
+
+        function closeBrandEditor() {
+            document.getElementById('brand-editor').style.display = 'none';
+        }
+
+        function saveBrandName() {
+            var newName = document.getElementById('brand-input').value.trim();
+            var msgEl = document.getElementById('brand-save-msg');
+
+            if (!newName) {
+                msgEl.textContent = '⚠️ Nama tidak boleh kosong!';
+                msgEl.style.color = '#f87171';
+                return;
+            }
+
+            msgEl.textContent = 'Menyimpan...';
+            msgEl.style.color = '#94a3b8';
+
+            var formData = new FormData();
+            formData.append('site_name', newName);
+
+            fetch('{{ url_for("update_site_name") }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.status === 'success') {
+                    document.getElementById('navbar-brand-text').textContent = data.site_name;
+                    document.querySelectorAll('.footer-brand').forEach(function(el) {
+                        el.textContent = data.site_name;
+                    });
+                    msgEl.textContent = '✅ Berhasil disimpan!';
+                    msgEl.style.color = '#4ade80';
+                    setTimeout(closeBrandEditor, 1200);
+                } else {
+                    msgEl.textContent = '❌ ' + (data.message || 'Terjadi kesalahan');
+                    msgEl.style.color = '#f87171';
+                }
+            })
+            .catch(function() {
+                msgEl.textContent = '❌ Gagal terhubung ke server';
+                msgEl.style.color = '#f87171';
+            });
+        }
+
+        // Tutup editor jika klik di luar area editor
+        document.addEventListener('click', function(e) {
+            var editor = document.getElementById('brand-editor');
+            var btnEdit = document.getElementById('btn-edit-brand');
+            var brandLink = document.getElementById('navbar-brand-link');
+            if (editor && editor.style.display === 'block') {
+                if (!editor.contains(e.target) && e.target !== btnEdit && !btnEdit.contains(e.target) && e.target !== brandLink && !brandLink.contains(e.target)) {
+                    closeBrandEditor();
+                }
+            }
+        });
+    </script>
+    {% endif %}
 </body>
 </html>
