@@ -3,117 +3,136 @@
 {% block title %}Edit Profil - Dashboard Admin{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h2 class="fw-bold"><i class="fa-solid fa-user-pen me-2"></i>Edit Profil</h2>
-                    <p class="text-muted">Perbarui informasi pribadi, kontak, dan keahlian Anda.</p>
+<div class="bento-section" style="background: linear-gradient(135deg, #0f0709, #1a0b11, #2b0f17); min-height: calc(100vh - var(--navbar-h)); position: relative; overflow: hidden;">
+    
+    <!-- Subtle glow effect background -->
+    <div style="position: absolute; top: -10%; left: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(139, 21, 56, 0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+    <div style="position: absolute; bottom: -10%; right: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(194, 24, 91, 0.1) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+
+    <div class="bento-section-header reveal" style="max-width: 900px; margin-top: 1rem; position: relative; z-index: 1;">
+        <p class="page-label" style="color: #c2185b;"><i class="fa-solid fa-user-pen me-1"></i> Dashboard Admin</p>
+        <h1 class="page-title">Edit <span style="background: linear-gradient(135deg, #c2185b, #8b1538); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Profil</span></h1>
+        <p class="page-subtitle" style="color: #c2a9b3;">Perbarui informasi pribadi, kontak, dan keahlian Anda untuk ditampilkan di halaman depan.</p>
+    </div>
+
+    <!-- Pesan Sukses / Error -->
+    <div style="max-width: 900px; margin: 0 auto; position: relative; z-index: 1;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show mb-4 reveal" role="alert" style="border-radius: var(--radius-md); background: rgba(194, 24, 91, 0.15); border: 1px solid rgba(194, 24, 91, 0.3); color: #f8f2f4;">
+                        {{ message }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div style="max-width: 900px; margin: 0 auto; position: relative; z-index: 1;">
+        <form action="{{ url_for('dashboard_profile') }}" method="POST" enctype="multipart/form-data">
+            
+            <div class="bento-grid" style="grid-template-columns: 1fr; gap: 1.5rem;">
+                
+                <!-- BAGIAN 1: Foto Profil & Informasi Dasar -->
+                <div class="bento-cell reveal reveal-1" style="background: rgba(43, 15, 23, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(194, 24, 91, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-radius: 20px;">
+                    <h5 style="color: #f8f2f4; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-id-badge" style="color: #c2185b;"></i> Informasi Dasar & Foto
+                    </h5>
+                    
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            {% if user.photo %}
+                                <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="Foto Profil" style="width: 130px; height: 130px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(194, 24, 91, 0.4); box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+                            {% else %}
+                                <div style="width: 130px; height: 130px; border-radius: 50%; background: linear-gradient(135deg, rgba(194, 24, 91, 0.2), rgba(139, 21, 56, 0.1)); display: flex; align-items: center; justify-content: center; border: 3px solid rgba(194, 24, 91, 0.4); margin: 0 auto;">
+                                    <i class="fa-solid fa-user-astronaut" style="font-size: 3.5rem; color: #c2185b; opacity: 0.7;"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-9">
+                            <label for="photo" class="form-label-custom">Ganti Foto Profil (Opsional)</label>
+                            <input class="form-control form-control-dark" type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg, image/gif">
+                            <div style="font-size: 0.8rem; color: #8a6d79; margin-top: 0.4rem;">Maksimal ukuran 2MB. Format: JPG, PNG, GIF.</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 p-4 rounded" style="background: rgba(194, 24, 91, 0.08); border: 1px solid rgba(194, 24, 91, 0.2); border-radius: 16px;">
+                        <label for="site_name" class="form-label-custom"><i class="fa-solid fa-heading me-2" style="color: #c2185b;"></i>Nama Header / Navbar Brand</label>
+                        <input type="text" class="form-control form-control-dark" id="site_name" name="site_name" value="{{ user.site_name or '&lt;Portofolio /&gt;' }}" maxlength="60" placeholder="Contoh: &lt;MyPortfolio /&gt;">
+                        <div style="font-size: 0.8rem; color: #8a6d79; margin-top: 0.4rem;">Teks ini akan tampil sebagai brand di pojok kiri navbar.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="name" class="form-label-custom">Nama Lengkap *</label>
+                        <input type="text" class="form-control form-control-dark" id="name" name="name" value="{{ user.name }}" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="bio" class="form-label-custom">Bio Singkat</label>
+                        <textarea class="form-control form-control-dark" id="bio" name="bio" rows="4">{{ user.bio or '' }}</textarea>
+                        <div style="font-size: 0.8rem; color: #8a6d79; margin-top: 0.4rem;">Deskripsikan diri Anda secara singkat dan menarik.</div>
+                    </div>
+                </div>
+
+                <!-- BAGIAN 2: Keahlian (Skills) -->
+                <div class="bento-cell reveal reveal-2" style="background: rgba(43, 15, 23, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(194, 24, 91, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-radius: 20px;">
+                    <h5 style="color: #f8f2f4; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-code-branch" style="color: #c2185b;"></i> Keahlian (Skills)
+                    </h5>
+                    <div class="mb-2">
+                        <label for="skills" class="form-label-custom">Daftar Keahlian</label>
+                        <input type="text" class="form-control form-control-dark" id="skills" name="skills" value="{{ user.skills or '' }}" placeholder="Contoh: Python, Flask, UI/UX Design">
+                        <div style="font-size: 0.8rem; color: #8a6d79; margin-top: 0.4rem;">Pisahkan setiap keahlian dengan tanda koma (,).</div>
+                    </div>
+                </div>
+
+                <!-- BAGIAN 3: Kontak & Sosial Media -->
+                <div class="bento-cell reveal reveal-3" style="background: rgba(43, 15, 23, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(194, 24, 91, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-radius: 20px;">
+                    <h5 style="color: #f8f2f4; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-address-card" style="color: #c2185b;"></i> Kontak & Sosial Media
+                    </h5>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label-custom">Email Publik</label>
+                            <input type="email" class="form-control form-control-dark" id="email" name="email" value="{{ user.email or '' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label-custom">No. Telepon / WhatsApp</label>
+                            <input type="text" class="form-control form-control-dark" id="phone" name="phone" value="{{ user.phone or '' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="address" class="form-label-custom">Lokasi / Alamat</label>
+                        <input type="text" class="form-control form-control-dark" id="address" name="address" value="{{ user.address or '' }}">
+                    </div>
+
+                    <div class="row g-4 mb-2">
+                        <div class="col-md-4">
+                            <label for="github" class="form-label-custom"><i class="fa-brands fa-github me-1" style="color: #c2185b;"></i> Link GitHub</label>
+                            <input type="url" class="form-control form-control-dark" id="github" name="github" value="{{ user.github or '' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="linkedin" class="form-label-custom"><i class="fa-brands fa-linkedin me-1" style="color: #c2185b;"></i> Link LinkedIn</label>
+                            <input type="url" class="form-control form-control-dark" id="linkedin" name="linkedin" value="{{ user.linkedin or '' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="instagram" class="form-label-custom"><i class="fa-brands fa-instagram me-1" style="color: #c2185b;"></i> Link Instagram</label>
+                            <input type="url" class="form-control form-control-dark" id="instagram" name="instagram" value="{{ user.instagram or '' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="reveal reveal-4" style="margin-top: 1rem; margin-bottom: 3rem; text-align: right;">
+                    <button type="submit" style="background: linear-gradient(135deg, #c2185b, #8b1538); color: #fff; border: none; padding: 0.9rem 2.2rem; border-radius: 50px; font-weight: 700; font-size: 1rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(194, 24, 91, 0.35); display: inline-flex; align-items: center; gap: 0.6rem; cursor: pointer;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(194, 24, 91, 0.55)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(194, 24, 91, 0.35)';">
+                        <i class="fa-solid fa-save"></i> Simpan Perubahan
+                    </button>
                 </div>
             </div>
-
-            <!-- Pesan Sukses / Error -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-4 p-md-5">
-                    <!-- enctype="multipart/form-data" diperlukan karena ada fitur upload foto profil -->
-                    <form action="{{ url_for('dashboard_profile') }}" method="POST" enctype="multipart/form-data">
-                        
-                        <!-- BAGIAN 1: Foto Profil & Informasi Dasar -->
-                        <h5 class="fw-bold text-primary mb-4 border-bottom pb-2">Informasi Dasar & Foto</h5>
-                        
-                        <!-- Field Site Name / Nama Header -->
-                        <div class="mb-4 p-3 rounded" style="background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25);">
-                            <label for="site_name" class="form-label fw-bold"><i class="fa-solid fa-heading me-2 text-primary"></i>Nama Header / Navbar Brand</label>
-                            <input type="text" class="form-control bg-light" id="site_name" name="site_name" value="{{ user.site_name or '&lt;Portofolio /&gt;' }}" maxlength="60" placeholder="Contoh: &lt;MyPortfolio /&gt;">
-                            <div class="form-text">Teks ini akan tampil sebagai brand di pojok kiri navbar. Bisa juga diedit langsung dari navbar saat login.</div>
-                        </div>
-                        
-                        <div class="row mb-4 align-items-center">
-                            <div class="col-md-3 text-center mb-3 mb-md-0">
-                                {% if user.photo %}
-                                    <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" class="rounded-circle img-thumbnail shadow-sm" alt="Foto Profil" style="width: 150px; height: 150px; object-fit: cover;">
-                                {% else %}
-                                    <!-- Gambar default jika belum pernah upload foto -->
-                                    <img src="https://via.placeholder.com/150" class="rounded-circle img-thumbnail shadow-sm" alt="Default Foto">
-                                {% endif %}
-                            </div>
-                            <div class="col-md-9">
-                                <label for="photo" class="form-label fw-bold">Ganti Foto Profil (Opsional)</label>
-                                <input class="form-control bg-light" type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg, image/gif">
-                                <div class="form-text">Maksimal ukuran 2MB. Format: JPG, PNG, GIF.</div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="name" class="form-label fw-bold">Nama Lengkap *</label>
-                            <input type="text" class="form-control bg-light" id="name" name="name" value="{{ user.name }}" required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="bio" class="form-label fw-bold">Bio Singkat</label>
-                            <textarea class="form-control bg-light" id="bio" name="bio" rows="4">{{ user.bio or '' }}</textarea>
-                            <div class="form-text">Deskripsikan diri Anda secara singkat dan menarik. Bagian ini akan muncul di halaman depan.</div>
-                        </div>
-
-                        <!-- BAGIAN 2: Keahlian (Skills) -->
-                        <h5 class="fw-bold text-primary mt-5 mb-4 border-bottom pb-2">Keahlian (Skills)</h5>
-                        <div class="mb-4">
-                            <label for="skills" class="form-label fw-bold">Daftar Keahlian</label>
-                            <input type="text" class="form-control bg-light" id="skills" name="skills" value="{{ user.skills or '' }}" placeholder="Contoh: Python, Flask, UI/UX Design, Public Speaking">
-                            <div class="form-text">Pisahkan setiap keahlian dengan tanda koma (,).</div>
-                        </div>
-
-                        <!-- BAGIAN 3: Kontak & Sosial Media -->
-                        <h5 class="fw-bold text-primary mt-5 mb-4 border-bottom pb-2">Kontak & Sosial Media</h5>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label fw-bold">Email Publik</label>
-                                <input type="email" class="form-control bg-light" id="email" name="email" value="{{ user.email or '' }}">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="phone" class="form-label fw-bold">No. Telepon / WhatsApp</label>
-                                <input type="text" class="form-control bg-light" id="phone" name="phone" value="{{ user.phone or '' }}">
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label for="address" class="form-label fw-bold">Lokasi / Alamat</label>
-                            <input type="text" class="form-control bg-light" id="address" name="address" value="{{ user.address or '' }}">
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="github" class="form-label fw-bold">Link GitHub</label>
-                                <input type="url" class="form-control bg-light" id="github" name="github" value="{{ user.github or '' }}">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="linkedin" class="form-label fw-bold">Link LinkedIn</label>
-                                <input type="url" class="form-control bg-light" id="linkedin" name="linkedin" value="{{ user.linkedin or '' }}">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="instagram" class="form-label fw-bold">Link Instagram</label>
-                                <input type="url" class="form-control bg-light" id="instagram" name="instagram" value="{{ user.instagram or '' }}">
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-end mt-4 pt-3 border-top">
-                            <button type="submit" class="btn btn-primary fw-bold btn-lg"><i class="fa-solid fa-save me-2"></i>Simpan Perubahan</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 {% endblock %}
