@@ -3,133 +3,121 @@
 {% block title %}Tentang Saya - Web Portofolio{% endblock %}
 
 {% block content %}
-<section class="section-darker" style="padding-top: 3rem;">
-    <div class="container reveal">
-        
-        <!-- Header -->
-        <div class="mb-5 pb-2 text-md-start text-center">
-            <h1 style="font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 0;">
-                Kisah & <span class="gradient-text">Perjalanan</span>
-            </h1>
-        </div>
+<div class="bento-section" style="background: var(--bg-base);">
 
-        <!-- SPLIT SCREEN LAYOUT -->
-        <div class="split-screen" style="gap: 4rem;">
-            
-            <!-- Left Side (Sticky Image) -->
-            <div style="flex: 1; min-width: 220px; max-width: 260px;">
-                <div class="split-sticky">
-                    <div style="border-radius: 24px; overflow: hidden; border: 1px solid var(--border-color); position: relative; background: var(--bg-card); padding: 1rem;">
-                        <div style="border-radius: 16px; overflow: hidden;">
-                            {% if user and user.photo %}
-                                <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="Foto Profil" style="width: 100%; height: auto; display: block; filter: grayscale(20%); transition: filter 0.5s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(20%)'">
-                            {% else %}
-                                <img src="https://placehold.co/400x500/16161f/7c3aed?text=Foto+Profil" alt="Default Foto" style="width: 100%; height: auto; display: block;">
-                            {% endif %}
-                        </div>
+    <!-- Page Header -->
+    <div class="bento-section-header reveal">
+        <p class="page-label"><i class="fa-solid fa-user me-1"></i> Profil</p>
+        <h1 class="page-title">Kisah &amp; <span class="gradient-text">Perjalanan</span></h1>
+        <p class="page-subtitle">Sedikit tentang siapa saya, apa yang saya kerjakan, dan bagaimana kita bisa berkolaborasi.</p>
+    </div>
 
-                        <!-- Info Card Overlay -->
-                        <div style="margin-top: 1.5rem; text-align: center;">
-                            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.2rem;">{% if user %}{{ user.name }}{% else %}Developer{% endif %}</h3>
-                            <p style="color: var(--accent-2); font-weight: 500; font-size: 0.95rem; margin-bottom: 1.5rem;">Web Developer & Designer</p>
-                            
-                            <!-- Socials -->
-                            {% if user %}
-                            <div class="d-flex justify-content-center gap-3">
-                                {% if user.github %}
-                                <a href="{{ user.github }}" target="_blank" style="width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-primary); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='var(--gradient)'; this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='var(--text-primary)'">
-                                    <i class="fa-brands fa-github" style="font-size: 1.2rem;"></i>
-                                </a>
-                                {% endif %}
-                                {% if user.linkedin %}
-                                <a href="{{ user.linkedin }}" target="_blank" style="width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-primary); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='var(--gradient)'; this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='var(--text-primary)'">
-                                    <i class="fa-brands fa-linkedin-in" style="font-size: 1.2rem;"></i>
-                                </a>
-                                {% endif %}
-                                {% if user.instagram %}
-                                <a href="{{ user.instagram }}" target="_blank" style="width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-primary); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='var(--gradient)'; this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='var(--text-primary)'">
-                                    <i class="fa-brands fa-instagram" style="font-size: 1.2rem;"></i>
-                                </a>
-                                {% endif %}
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Bento Grid -->
+    <div class="about-bento reveal" style="max-width: 1100px; margin: 0 auto;">
 
-            <!-- Right Side (Scrollable Content) -->
-            <div style="flex: 1.5; min-width: 300px;">
-                
-                <!-- Bio Section -->
-                <div style="margin-bottom: 4rem;">
-                    <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
-                        <i class="fa-solid fa-user-astronaut text-primary"></i> Biografi
-                    </h3>
-                    <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8;">
-                        {% if user %}
-                            {{ user.bio or 'Belum ada biografi yang ditambahkan.' }}
-                        {% else %}
-                            Belum ada biografi yang ditambahkan.
-                        {% endif %}
-                    </p>
-                </div>
-
-                <!-- Contact Details -->
-                <div style="margin-bottom: 4rem;">
-                    <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
-                        <i class="fa-solid fa-address-card text-success"></i> Kontak Info
-                    </h3>
-                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 2rem;">
-                        <div class="row g-4">
-                            <div class="col-sm-6">
-                                <p style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem;">Email</p>
-                                <p style="font-size: 1.1rem; font-weight: 500;">{% if user %}{{ user.email or '-' }}{% else %}-{% endif %}</p>
-                            </div>
-                            <div class="col-sm-6">
-                                <p style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem;">Telepon</p>
-                                <p style="font-size: 1.1rem; font-weight: 500;">{% if user %}{{ user.phone or '-' }}{% else %}-{% endif %}</p>
-                            </div>
-                            <div class="col-12">
-                                <p style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem;">Lokasi</p>
-                                <p style="font-size: 1.1rem; font-weight: 500;">{% if user %}{{ user.address or '-' }}{% else %}-{% endif %}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Skills Section (Visual Indicators) -->
-                <div>
-                    <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
-                        <i class="fa-solid fa-code-branch text-warning"></i> Keahlian
-                    </h3>
-                    
-                    {% if user and user.skills %}
-                        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                        {% set skills = user.skills.split(',') %}
-                        {% for skill in skills %}
-                            {% set val = 90 - (loop.index0 * 5) %} <!-- Fake mastery value for visuals -->
-                            {% if val < 50 %}{% set val = 50 %}{% endif %}
-                            
-                            <div>
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-                                    <span style="font-weight: 600;">{{ skill.strip() }}</span>
-                                </div>
-                                <div class="skill-bar-container">
-                                    <!-- Use inline style with a small delay for animation effect -->
-                                    <div class="skill-bar-fill" style="width: {{ val }}%;"></div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
+        <!-- CELL 1: Foto & Identitas (col-span-1 row-span-2) -->
+        <div class="bento-cell row-span-2 reveal reveal-1" style="padding: 0; overflow: hidden; min-height: 400px; align-items: stretch;">
+            <div style="flex: 1; display: flex; flex-direction: column;">
+                <!-- Foto -->
+                <div style="flex: 1; overflow: hidden; min-height: 240px; position: relative;">
+                    {% if user and user.photo %}
+                        <img src="{{ url_for('static', filename='uploads/' + user.photo) }}"
+                             alt="Foto Profil"
+                             style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;"
+                             onmouseover="this.style.transform='scale(1.04)'"
+                             onmouseout="this.style.transform='scale(1)'">
                     {% else %}
-                        <p style="color: var(--text-muted);">Belum ada keahlian yang ditambahkan.</p>
+                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, rgba(159,18,57,0.25), rgba(225,29,72,0.15)); display: flex; align-items: center; justify-content: center;">
+                            <i class="fa-solid fa-user-astronaut" style="font-size: 5rem; color: var(--purple); opacity: 0.6;"></i>
+                        </div>
+                    {% endif %}
+                    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(to top, var(--bg-card), transparent);"></div>
+                </div>
+
+                <!-- Info dasar -->
+                <div style="padding: 1.5rem; border-top: 1px solid var(--border);">
+                    <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.2rem;">
+                        {% if user %}{{ user.name }}{% else %}Developer{% endif %}
+                    </h3>
+                    <p style="color: var(--blue); font-weight: 500; font-size: 0.88rem; margin-bottom: 1.2rem;">Web Developer &amp; Designer</p>
+
+                    <!-- Social Links -->
+                    {% if user %}
+                    <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                        {% if user.github %}
+                        <a href="{{ user.github }}" target="_blank" class="social-btn" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                        {% endif %}
+                        {% if user.linkedin %}
+                        <a href="{{ user.linkedin }}" target="_blank" class="social-btn" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        {% endif %}
+                        {% if user.instagram %}
+                        <a href="{{ user.instagram }}" target="_blank" class="social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        {% endif %}
+                        {% if user.email %}
+                        <a href="mailto:{{ user.email }}" class="social-btn" title="Email"><i class="fa-solid fa-envelope"></i></a>
+                        {% endif %}
+                    </div>
                     {% endif %}
                 </div>
-
             </div>
+        </div>
+
+        <!-- CELL 2: Bio -->
+        <div class="bento-cell accent-purple col-span-2 reveal reveal-2">
+            <p class="page-label"><i class="fa-solid fa-user-astronaut me-1"></i> Biografi</p>
+            <p style="color: var(--text-2); font-size: 1rem; line-height: 1.85;">
+                {% if user %}
+                    {{ user.bio or 'Belum ada biografi yang ditambahkan.' }}
+                {% else %}
+                    Belum ada biografi yang ditambahkan.
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- CELL 3: Kontak Info (2 cols wide) -->
+        <div class="bento-cell dark-fill col-span-2 reveal reveal-3">
+            <p class="page-label"><i class="fa-solid fa-address-card me-1"></i> Info Kontak</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 0.5rem;">
+                <div>
+                    <p style="color: var(--text-3); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; font-weight: 600;">Email</p>
+                    <p style="font-weight: 600; font-size: 0.9rem; word-break: break-all;">{% if user %}{{ user.email or '—' }}{% else %}—{% endif %}</p>
+                </div>
+                <div>
+                    <p style="color: var(--text-3); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; font-weight: 600;">Telepon</p>
+                    <p style="font-weight: 600; font-size: 0.9rem;">{% if user %}{{ user.phone or '—' }}{% else %}—{% endif %}</p>
+                </div>
+                <div>
+                    <p style="color: var(--text-3); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; font-weight: 600;">Lokasi</p>
+                    <p style="font-weight: 600; font-size: 0.9rem;">{% if user %}{{ user.address or '—' }}{% else %}—{% endif %}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CELL 4: Skills (full width 3 cols) -->
+        <div class="bento-cell col-span-3 reveal reveal-4" style="grid-column: span 3;">
+            <p class="page-label"><i class="fa-solid fa-code-branch me-1"></i> Keahlian</p>
+            {% if user and user.skills %}
+                {% set skills = user.skills.split(',') %}
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem; margin-top: 0.75rem;">
+                    {% for skill in skills %}
+                        {% set val = 90 - (loop.index0 * 5) %}
+                        {% if val < 50 %}{% set val = 50 %}{% endif %}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                <span style="font-weight: 600; font-size: 0.88rem;">{{ skill.strip() }}</span>
+                                <span style="color: var(--text-3); font-size: 0.75rem;">{{ val }}%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar-fill" style="width: {{ val }}%;"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="color: var(--text-2); margin-top: 0.75rem;">Belum ada keahlian yang ditambahkan.</p>
+            {% endif %}
         </div>
 
     </div>
-</section>
+</div>
 {% endblock %}

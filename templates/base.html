@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,16 +50,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
                     <li class="nav-item">
-                        <a class="nav-link-custom {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">Home</a>
+                        <a class="nav-link-custom {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}"><i class="fa-solid fa-house fa-sm me-1"></i>Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link-custom {% if request.endpoint == 'about' %}active{% endif %}" href="{{ url_for('about') }}">About</a>
+                        <a class="nav-link-custom {% if request.endpoint == 'about' %}active{% endif %}" href="{{ url_for('about') }}"><i class="fa-solid fa-user fa-sm me-1"></i>About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link-custom {% if request.endpoint == 'portfolio' %}active{% endif %}" href="{{ url_for('portfolio') }}">Portfolio</a>
+                        <a class="nav-link-custom {% if request.endpoint == 'portfolio' %}active{% endif %}" href="{{ url_for('portfolio') }}"><i class="fa-solid fa-briefcase fa-sm me-1"></i>Portfolio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link-custom {% if request.endpoint == 'contact' %}active{% endif %}" href="{{ url_for('contact') }}">Contact</a>
+                        <a class="nav-link-custom {% if request.endpoint == 'contact' %}active{% endif %}" href="{{ url_for('contact') }}"><i class="fa-solid fa-envelope fa-sm me-1"></i>Contact</a>
                     </li>
 
                     <!-- Admin Dropdown / Tombol Login -->

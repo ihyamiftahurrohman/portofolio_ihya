@@ -4,138 +4,135 @@
 
 {% block content %}
 
-<!-- ===== HERO SECTION (CENTER ALIGNED) ===== -->
-<section class="hero-section" style="min-height: calc(100vh - var(--navbar-height)); display: flex; align-items: center; justify-content: center; text-align: center;">
-    <!-- Blob Background -->
-    <div style="position: absolute; top: -10%; left: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
-    <div style="position: absolute; bottom: -10%; right: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+<!-- ===== HOME BENTO GRID ===== -->
+<div style="background: var(--bg-base); min-height: calc(100vh - var(--navbar-h)); display: flex; flex-direction: column; justify-content: center; padding: 1.5rem 0;">
 
-    <div class="container reveal" style="max-width: 900px; z-index: 1;">
-        
-        <!-- Foto Profil Avatar -->
-        <div style="width: 170px; height: 170px; border-radius: 50%; overflow: hidden; margin: 0 auto 1.5rem; border: 3px solid rgba(124, 58, 237, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; background: var(--bg-card);">
-            {% if user and user.photo %}
-                <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" alt="Profil">
-            {% else %}
-                <i class="fa-solid fa-user-astronaut" style="font-size: 3.5rem; color: var(--accent-1);"></i>
-            {% endif %}
-        </div>
+    <div class="home-bento reveal">
 
-        <div class="hero-badge mx-auto mb-4" style="display: inline-flex;">
-            <i class="fa-solid fa-bolt text-warning me-2"></i> Selamat Datang di Portofolio Saya
-        </div>
-
-        <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem; letter-spacing: -1px;">
-            {% if user %}
-                Halo, Saya <span class="gradient-text">{{ user.name }}</span>
-            {% else %}
-                Halo, Saya <span class="gradient-text">Web Developer</span>
-            {% endif %}
-        </h1>
-
-        <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem;">
-            {% if user %}
-                {{ user.bio or 'Seorang kreator digital yang bersemangat membangun hal-hal luar biasa di internet.' }}
-            {% else %}
-                Seorang kreator digital yang bersemangat membangun hal-hal luar biasa di internet.
-            {% endif %}
-        </p>
-
-        <div class="d-flex justify-content-center gap-3">
-            <a href="{{ url_for('portfolio') }}" class="btn-primary-custom px-4 py-3" style="font-size: 1rem; border-radius: 50px;">
-                <i class="fa-solid fa-compass me-2"></i> Jelajahi Karya
-            </a>
-            <a href="{{ url_for('contact') }}" class="btn-outline-custom px-4 py-3" style="font-size: 1rem; border-radius: 50px;">
-                <i class="fa-solid fa-envelope me-2"></i> Hubungi Saya
-            </a>
-        </div>
-    </div>
-</section>
-
-
-<!-- ===== BENTO BOX HIGHLIGHTS ===== -->
-<section class="section-darker pt-2 pb-5">
-    <div class="container reveal">
-        <div class="bento-grid">
-            
-            <!-- Box 1: Intro (Large) -->
-            <div class="bento-item bento-large" style="background: linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(22,22,31,1) 100%);">
-                <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-1); font-weight: 700; margin-bottom: 1rem;">Tentang Saya</p>
-                <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">
-                    {% if user %}{{ user.name }}{% else %}Developer Kreatif{% endif %}
-                </h3>
-                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6;">
-                    Saya berfokus pada perpaduan desain modern dan arsitektur kode yang tangguh untuk menciptakan produk web yang tidak hanya terlihat indah tapi juga berperforma tinggi.
+        <!-- CELL 1: Hero Identity (2×2) -->
+        <div class="bento-cell cell-hero">
+            <div style="position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; gap: 1.2rem;">
+                <div>
+                    <span class="bento-pill" style="margin-bottom: 1rem; display: inline-flex;">
+                        <i class="fa-solid fa-bolt"></i> Selamat Datang
+                    </span>
+                    <h1 style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 900; line-height: 1.15; letter-spacing: -0.5px; margin-top: 0.5rem;">
+                        {% if user %}
+                            Halo, Saya<br><span class="gradient-text">{{ user.name }}</span>
+                        {% else %}
+                            Halo, Saya<br><span class="gradient-text">Web Developer</span>
+                        {% endif %}
+                    </h1>
+                </div>
+                <p style="color: var(--text-2); font-size: 0.95rem; line-height: 1.7; max-width: 340px;">
+                    {% if user %}
+                        {{ user.bio or 'Seorang kreator digital yang bersemangat membangun hal-hal luar biasa di internet.' }}
+                    {% else %}
+                        Seorang kreator digital yang bersemangat membangun hal-hal luar biasa di internet.
+                    {% endif %}
                 </p>
-                <div class="mt-auto pt-4">
-                    <a href="{{ url_for('about') }}" style="color: var(--text-primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-1)'" onmouseout="this.style.color='var(--text-primary)'">
-                        Kenali Lebih Jauh <i class="fa-solid fa-arrow-right"></i>
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: auto;">
+                    <a href="{{ url_for('portfolio') }}" class="btn-primary-custom" style="padding: 0.65rem 1.4rem; font-size: 0.9rem; border-radius: 50px;">
+                        <i class="fa-solid fa-compass"></i> Karya Saya
+                    </a>
+                    <a href="{{ url_for('contact') }}" class="btn-ghost" style="padding: 0.65rem 1.2rem; font-size: 0.9rem;">
+                        <i class="fa-solid fa-envelope"></i> Hubungi
                     </a>
                 </div>
             </div>
+        </div>
 
-            <!-- Box 2: Stats (Tall) -->
-            <div class="bento-item bento-tall d-flex flex-column justify-content-center align-items-center text-center">
-                <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(59,130,246,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                    <i class="fa-solid fa-rocket" style="font-size: 2rem; color: var(--accent-2);"></i>
+        <!-- CELL 2: Avatar Photo (1×2) -->
+        <div class="bento-cell cell-avatar" style="min-height: 280px;">
+            {% if user and user.photo %}
+                <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="Foto Profil" style="border-radius: var(--radius-lg);">
+            {% else %}
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(159,18,57,0.2), rgba(225,29,72,0.1));">
+                    <i class="fa-solid fa-user-astronaut" style="font-size: 5rem; color: var(--purple); opacity: 0.7;"></i>
                 </div>
-                <h2 style="font-size: 3.5rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ projects|length if projects else 0 }}+</h2>
-                <p style="color: var(--text-muted); font-weight: 500; font-size: 1.1rem; margin-top: 0.5rem;">Project<br>Selesai</p>
+            {% endif %}
+        </div>
+
+        <!-- CELL 3: Project Count Stat -->
+        <div class="bento-cell cell-stat accent-blue">
+            <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(225,29,72,0.15); display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem;">
+                <i class="fa-solid fa-rocket" style="color: var(--blue); font-size: 1.2rem;"></i>
             </div>
+            <div class="stat-num">{{ projects|length if projects else 0 }}+</div>
+            <div class="stat-label">Project<br>Selesai</div>
+        </div>
 
-            <!-- Box 3: Skill (Normal) -->
-            <div class="bento-item" style="display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 0.5rem;">Tech Stack</p>
-                    <h4 style="font-size: 1.2rem; font-weight: 700;">Alat Utama</h4>
-                </div>
-                <div class="d-flex flex-wrap gap-2 mt-3">
+        <!-- CELL 4: Tech Stack Quick View -->
+        <div class="bento-cell dark-fill" style="justify-content: space-between;">
+            <div>
+                <p style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-3); margin-bottom: 0.4rem; font-weight: 600;">Tech Stack</p>
+                <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Alat Utama</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
                     {% if user and user.skills %}
                         {% for skill in user.skills.split(',')[:4] %}
-                            <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.85rem; font-weight: 500;">{{ skill.strip() }}</span>
+                            <span class="bento-pill" style="font-size: 0.73rem;">{{ skill.strip() }}</span>
                         {% endfor %}
                     {% else %}
-                        <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.85rem;">Python</span>
-                        <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.85rem;">Flask</span>
-                        <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.85rem;">CSS</span>
+                        <span class="bento-pill">Python</span>
+                        <span class="bento-pill blue">Flask</span>
+                        <span class="bento-pill cyan">CSS</span>
                     {% endif %}
                 </div>
             </div>
-
-            <!-- Box 4: Contact (Normal) -->
-            <div class="bento-item" style="background: var(--gradient); border: none;">
-                <div class="mt-auto">
-                    <h4 style="color: #fff; font-weight: 700; font-size: 1.3rem; margin-bottom: 0.5rem;">Punya Ide?</h4>
-                    <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-bottom: 1.5rem;">Mari kita bicarakan project Anda selanjutnya.</p>
-                    <a href="{{ url_for('contact') }}" style="display: inline-block; background: #fff; color: var(--accent-1); padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; text-decoration: none; font-size: 0.9rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                        Kirim Pesan
-                    </a>
-                </div>
-            </div>
-
-            <!-- Box 5: Latest Project (Wide) -->
-            <div class="bento-item bento-wide" style="padding: 0; display: flex; flex-direction: row; align-items: stretch;">
-                {% if projects %}
-                    {% set latest = projects[0] %}
-                    <div style="flex: 1; padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
-                        <span class="badge bg-primary mb-3" style="width: fit-content;">Project Terbaru</span>
-                        <h4 style="font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">{{ latest.title }}</h4>
-                        <p style="color: var(--text-muted); font-size: 0.95rem;">{{ latest.description[:80] }}...</p>
-                        <a href="{{ url_for('project_detail', id=latest.id) }}" style="color: var(--accent-2); font-weight: 600; text-decoration: none; margin-top: auto;">Lihat Project &rarr;</a>
-                    </div>
-                    <div style="flex: 1; position: relative;">
-                        <img src="{{ url_for('static', filename='uploads/' + latest.image) if latest.image else 'https://placehold.co/600x400/16161f/7c3aed?text=' + latest.title[:15] }}" style="width: 100%; height: 100%; object-fit: cover;" alt="Latest Project">
-                        <div style="position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg-card) 0%, transparent 50%);"></div>
-                    </div>
-                {% else %}
-                    <div style="padding: 2rem; width: 100%; display: flex; align-items: center; justify-content: center;">
-                        <p style="color: var(--text-muted);">Belum ada project untuk ditampilkan.</p>
-                    </div>
-                {% endif %}
-            </div>
-
+            <a href="{{ url_for('about') }}" style="color: var(--text-2); font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1.2rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--purple)'" onmouseout="this.style.color='var(--text-2)'">
+                Selengkapnya <i class="fa-solid fa-arrow-right fa-sm"></i>
+            </a>
         </div>
+
+        <!-- CELL 5: CTA Gradient -->
+        <div class="bento-cell grad-fill" style="justify-content: center; align-items: flex-start; gap: 0.75rem;">
+            <i class="fa-solid fa-lightbulb" style="font-size: 1.6rem; color: rgba(255,255,255,0.8);"></i>
+            <h4 style="color: #fff; font-weight: 700; font-size: 1.1rem; line-height: 1.3;">Punya Ide<br>Proyek?</h4>
+            <p style="color: rgba(255,255,255,0.72); font-size: 0.82rem; line-height: 1.5;">Mari kita diskusikan bersama.</p>
+            <a href="{{ url_for('contact') }}" style="margin-top: 0.5rem; display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.18); color: #fff; font-weight: 600; font-size: 0.85rem; padding: 0.55rem 1.1rem; border-radius: 50px; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.28)'" onmouseout="this.style.background='rgba(255,255,255,0.18)'">
+                Kirim Pesan <i class="fa-solid fa-arrow-right fa-sm"></i>
+            </a>
+        </div>
+
+        <!-- CELL 6: Latest Project Preview (2×1) -->
+        {% if projects %}
+        {% set latest = projects[0] %}
+        <div class="bento-cell col-span-2 accent-purple" style="padding: 0; flex-direction: row; align-items: stretch; overflow: hidden; min-height: 180px;">
+            <div style="flex: 1; padding: 1.75rem; display: flex; flex-direction: column; justify-content: center; gap: 0.6rem;">
+                <span class="bento-pill" style="width: fit-content; font-size: 0.72rem;">Project Terbaru</span>
+                <h4 style="font-size: 1.15rem; font-weight: 700; line-height: 1.3;">{{ latest.title }}</h4>
+                <p style="color: var(--text-2); font-size: 0.85rem; line-height: 1.6;">{{ latest.description[:90] }}…</p>
+                <a href="{{ url_for('project_detail', id=latest.id) }}" style="color: var(--blue); font-weight: 600; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.25rem; transition: gap 0.2s;" onmouseover="this.style.gap='0.7rem'" onmouseout="this.style.gap='0.4rem'">
+                    Lihat Detail <i class="fa-solid fa-arrow-right fa-sm"></i>
+                </a>
+            </div>
+            <div style="flex: 1; position: relative; overflow: hidden; min-height: 160px;">
+                <img src="{{ url_for('static', filename='uploads/' + latest.image) if latest.image else 'https://placehold.co/600x400/13131a/9f1239?text=' + latest.title[:15] }}"
+                     style="width: 100%; height: 100%; object-fit: cover;" alt="{{ latest.title }}">
+                <div style="position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg-card) 0%, transparent 45%);"></div>
+            </div>
+        </div>
+        {% else %}
+        <div class="bento-cell col-span-2 dark-fill" style="align-items: center; justify-content: center; text-align: center; min-height: 160px;">
+            <i class="fa-regular fa-folder-open" style="font-size: 2rem; color: var(--text-3); margin-bottom: 0.5rem;"></i>
+            <p style="color: var(--text-3); font-size: 0.9rem;">Belum ada project yang ditambahkan.</p>
+        </div>
+        {% endif %}
+
+        <!-- CELL 7: Marquee Skills strip (full width) -->
+        <div class="bento-cell cell-marquee" style="padding: 1rem 1.75rem; gap: 0;">
+            <div class="marquee-track">
+                {% set items = ['Python', 'Flask', 'SQLAlchemy', 'HTML5', 'CSS3', 'JavaScript', 'Git', 'SQLite', 'Bootstrap', 'Jinja2'] %}
+                {% for item in items %}
+                    <span class="marquee-item"><i class="fa-solid fa-circle" style="font-size: 0.3rem; color: var(--purple);"></i> {{ item }}</span>
+                {% endfor %}
+                {% for item in items %}
+                    <span class="marquee-item"><i class="fa-solid fa-circle" style="font-size: 0.3rem; color: var(--purple);"></i> {{ item }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
-</section>
+</div>
 
 {% endblock %}

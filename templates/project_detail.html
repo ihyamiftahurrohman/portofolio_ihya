@@ -3,74 +3,98 @@
 {% block title %}{{ project.title }} - Web Portofolio{% endblock %}
 
 {% block content %}
-<section class="section-darker">
-    <div class="container">
+<div class="bento-section" style="background: var(--bg-base);">
 
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb" style="background: none; padding: 0;">
-                <li class="breadcrumb-item">
-                    <a href="{{ url_for('portfolio') }}" style="color: var(--text-muted); text-decoration: none;">Portfolio</a>
+    <!-- Breadcrumb -->
+    <div style="max-width: 1100px; margin: 0 auto 1.5rem; padding: 0 0.5rem;">
+        <nav aria-label="breadcrumb">
+            <ol style="display: flex; align-items: center; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
+                <li>
+                    <a href="{{ url_for('portfolio') }}" style="color: var(--text-3); font-size: 0.85rem; text-decoration: none; transition: color 0.2s;"
+                       onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-3)'">
+                        Portfolio
+                    </a>
                 </li>
-                <li class="breadcrumb-item active" style="color: var(--text-primary);" aria-current="page">{{ project.title }}</li>
+                <li style="color: var(--text-3); font-size: 0.8rem;"><i class="fa-solid fa-chevron-right fa-xs"></i></li>
+                <li style="color: var(--text-2); font-size: 0.85rem; font-weight: 500;">{{ project.title }}</li>
             </ol>
         </nav>
+    </div>
 
-        <div class="row g-5 align-items-start">
-            <!-- Kolom Kiri: Gambar -->
-            <div class="col-lg-7">
-                <div style="border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color);">
-                    <img src="{{ url_for('static', filename='uploads/' + project.image) if project.image else 'https://placehold.co/800x450/16161f/7c3aed?text=' + project.title[:20] }}"
-                         class="img-fluid w-100"
-                         alt="{{ project.title }}"
-                         style="display: block; object-fit: cover; max-height: 420px;">
-                </div>
+    <!-- Bento Detail Layout -->
+    <div class="detail-bento">
+
+        <!-- LEFT: Gambar + Tech Tags -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+
+            <!-- Image Cell -->
+            <div class="bento-cell reveal reveal-1" style="padding: 0; overflow: hidden; min-height: 360px;">
+                <img src="{{ url_for('static', filename='uploads/' + project.image) if project.image else 'https://placehold.co/900x500/13131a/9f1239?text=' + project.title[:20] }}"
+                     alt="{{ project.title }}"
+                     style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; transition: transform 0.5s;"
+                     onmouseover="this.style.transform='scale(1.02)'"
+                     onmouseout="this.style.transform='scale(1)'">
             </div>
 
-            <!-- Kolom Kanan: Info Project -->
-            <div class="col-lg-5">
-                <p style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">
-                    <i class="fa-regular fa-calendar me-1"></i>
-                    {{ project.created_at.strftime('%d %b %Y') }}
-                </p>
-                <h1 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 1.5rem;">{{ project.title }}</h1>
-
-                {% if project.tech_stack %}
-                <div class="mb-4">
-                    <p style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem;">Teknologi</p>
-                    <div>
-                        {% for tech in project.tech_stack.split(',') %}
-                            <span class="tech-badge">{{ tech.strip() }}</span>
-                        {% endfor %}
-                    </div>
+            <!-- Tech Stack Cell -->
+            {% if project.tech_stack %}
+            <div class="bento-cell dark-fill reveal reveal-2">
+                <p class="page-label" style="margin-bottom: 0.75rem;"><i class="fa-solid fa-layer-group me-1"></i> Teknologi yang Digunakan</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                    {% for tech in project.tech_stack.split(',') %}
+                        <span class="tech-tag">{{ tech.strip() }}</span>
+                    {% endfor %}
                 </div>
-                {% endif %}
+            </div>
+            {% endif %}
 
-                <div class="mb-4">
-                    <p style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem;">Deskripsi Project</p>
-                    <p style="color: var(--text-muted); line-height: 1.8; white-space: pre-wrap; font-size: 0.95rem;">{{ project.description }}</p>
+        </div>
+
+        <!-- RIGHT: Info -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+
+            <!-- Header Cell -->
+            <div class="bento-cell accent-purple reveal reveal-1" style="gap: 0.75rem;">
+                <div>
+                    <p style="font-size: 0.72rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; margin-bottom: 0.3rem;">
+                        <i class="fa-regular fa-calendar me-1"></i>{{ project.created_at.strftime('%d %B %Y') }}
+                    </p>
+                    <h1 style="font-size: clamp(1.4rem, 2.5vw, 1.9rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.3px;">
+                        {{ project.title }}
+                    </h1>
                 </div>
 
-                <!-- Tombol Aksi -->
-                <div class="d-flex flex-column gap-3">
+                {% if project.demo_link or project.github_link %}
+                <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding-top: 0.5rem; border-top: 1px solid var(--border); margin-top: 0.25rem;">
                     {% if project.demo_link %}
-                    <a href="{{ project.demo_link }}" target="_blank" class="btn-primary-custom" style="justify-content: center; border-radius: 12px; padding: 0.8rem; text-align: center;">
+                    <a href="{{ project.demo_link }}" target="_blank" class="btn-primary-custom" style="padding: 0.6rem 1.2rem; font-size: 0.85rem; border-radius: 50px;">
                         <i class="fa-solid fa-globe"></i> Live Demo
                     </a>
                     {% endif %}
-
                     {% if project.github_link %}
-                    <a href="{{ project.github_link }}" target="_blank" class="btn-outline-custom" style="justify-content: center; border-radius: 12px; padding: 0.8rem; text-align: center;">
-                        <i class="fa-brands fa-github"></i> Source Code (GitHub)
+                    <a href="{{ project.github_link }}" target="_blank" class="btn-ghost" style="padding: 0.6rem 1.1rem; font-size: 0.85rem;">
+                        <i class="fa-brands fa-github"></i> GitHub
                     </a>
                     {% endif %}
-
-                    <a href="{{ url_for('portfolio') }}" class="btn-outline-custom" style="justify-content: center; border-radius: 12px; padding: 0.8rem; text-align: center; border-color: transparent;">
-                        <i class="fa-solid fa-arrow-left"></i> Kembali ke Portfolio
-                    </a>
                 </div>
+                {% endif %}
             </div>
+
+            <!-- Description Cell -->
+            <div class="bento-cell reveal reveal-2" style="flex: 1;">
+                <p class="page-label" style="margin-bottom: 0.75rem;"><i class="fa-solid fa-align-left me-1"></i> Deskripsi Project</p>
+                <p style="color: var(--text-2); font-size: 0.93rem; line-height: 1.85; white-space: pre-wrap;">{{ project.description }}</p>
+            </div>
+
+            <!-- Back button -->
+            <div class="bento-cell dark-fill reveal reveal-3" style="padding: 1.25rem 1.5rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1rem;">
+                <p style="color: var(--text-3); font-size: 0.82rem;">Lihat project lainnya</p>
+                <a href="{{ url_for('portfolio') }}" class="btn-ghost" style="padding: 0.5rem 1.1rem; font-size: 0.83rem; white-space: nowrap;">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali ke Portfolio
+                </a>
+            </div>
+
         </div>
     </div>
-</section>
+</div>
 {% endblock %}
